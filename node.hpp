@@ -77,7 +77,7 @@ public:
 			std::string line;
 
 			while (std::getline(file, line)) {
-				std::map<std::string, NValue> d = parseReadYaml(line, data);
+				std::map<std::string, NValue> d = parseReadYaml(line);
 
 				data.insert(d.begin(), d.end());
 			}

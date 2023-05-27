@@ -12,7 +12,7 @@ int main(int argc, char const *argv[])
 
 	node.read("data.yaml");
 
-	std::cout << node["age"].getIntValue() << std::endl;
+	std::cout << node["message"].getStringValue() << std::endl;
 
 	return 0;
 }

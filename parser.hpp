@@ -8,6 +8,7 @@
 
 #include "Type.hpp"
 
+
 std::vector<char*> split(const char* str, char delimiter)
 {
 	char tv[100][255];
@@ -32,18 +33,28 @@ std::vector<char*> split(const char* str, char delimiter)
     return result;
 }
 
-int isInt(std::string str)
+bool isInt(std::string str)
 {
 	try {
-        size_t pos = 0;
-        int nb = std::stoi(str, &pos);
-        if (pos == str.length())
-        	return nb;
-       	else
-       		return -1;
-    } catch (const std::exception&) {
-        return -1;
-    }
+		size_t pos = 0;
+		int nb = std::stoi(str, &pos);
+		if (pos == str.length())
+			return true;
+		else
+			return false;
+	} catch (const std::exception&) {
+		return false;
+	}
+}
+int toInt(std::string str)
+{
+	try {
+		size_t pos = 0;
+		int nb = std::stoi(str, &pos);
+		if (pos == str.length())
+			return nb;
+	} catch (const std::exception&) {}
+	return 0;
 }
 
 bool isBool(std::string str)
@@ -53,7 +64,7 @@ bool isBool(std::string str)
 	else if (str == "false")
 		return false;
 	else
-		return NULL;
+		return -1;
 }
 
 char isChar(std::string str)
@@ -61,7 +72,21 @@ char isChar(std::string str)
 	if (str.size() == 1)
 		return str[0];
 	else
-		return NULL;
+		return '\0';
+}
+
+std::string removeNonAscii(std::string& str)
+{
+	std::string result;
+	for (char c : str)
+	{
+		//character '\x01'. if not removed i couldn't parse
+		if (c != 1 && c < 128)
+		{
+			result += c;
+		}
+	}
+    return result;
 }
 
 NValue convert(std::string str)
@@ -69,9 +94,11 @@ NValue convert(std::string str)
 	if (str.compare("NULL") == 0 || str.empty())
 		return NValue();
 
-	if (isInt(str) != -1)
-		return NValue(isInt(str));
-	if (isBool(str) != NULL)
+	str = removeNonAscii(str);
+
+	if (isInt(str) == true)
+		return NValue(toInt(str));
+	if (isBool(str) != -1)
 		return NValue(isBool(str));
 	if (isChar(str) != '\0')
 		return NValue(isChar(str));
@@ -81,28 +108,14 @@ NValue convert(std::string str)
 
 std::string supFirstSpace(std::string str)
 {
-	char tv[1024];
-
-	bool isCommenced = false;
-	int index = 0;
-
-	for (int i = 0; i < str.size(); ++i)
-	{
-		char c = str.at(i);
-		if(c != ' ')
-			isCommenced = true;
-
-		if (isCommenced == true)
-		{
-			tv[index] = c;
-			index++;
-		}
-	}
-
-	return (std::string) tv;
+    size_t pos = str.find_first_not_of(' ');
+    if (pos != std::string::npos)
+        return str.substr(pos);
+    else
+        return str;
 }
 
-std::map<std::string, NValue> parseReadYaml(std::string line, std::map<std::string, NValue> data)
+std::map<std::string, NValue> parseReadYaml(std::string line)
 {
 	char tv[2][1024];
 	int index = 0;
@@ -125,7 +138,8 @@ std::map<std::string, NValue> parseReadYaml(std::string line, std::map<std::stri
 	std::string valueSTR(tv[1]);
 
 	NValue value = convert(supFirstSpace(valueSTR));
-	data[key] = value;
+
+	std::map<std::string, NValue> data{{key, value}};
 
 	return data;
 }
