@@ -4,108 +4,122 @@
 #include <iostream>
 #include <cstring>
 
-
-enum class NValueType
-{
-	INT,
-	STRING,
-	BOOL,
-	CHAR
-};
+#include "Verif.hpp"
 
 struct NValue
 {
-	NValueType type;
+	char* value;
 
-	union 
+	void clear()
 	{
-		int intV;
-		char* stringV;
-		bool boolV;
-		char charV;
-	};
+		delete[] value;
+	}
+	void setValue(std::string v)
+	{
+		clear();
+
+		value = new char[v.size() + 1];
+		std::strcpy(value, v.c_str());
+	}
+
 
 	//constructor
-	NValue()
-	{
-		type = NValueType::INT;
-		intV = 0;
-	}
+	NValue(){}
 	NValue(int value)
 	{
-		type = NValueType::INT;
-		intV = value;
+		setValue(std::to_string(value));
 	}
+	NValue(float value)
+	{
+		setValue(std::to_string(value));
+	}
+
 	NValue(std::string value)
 	{
-		type = NValueType::STRING;
-        stringV = new char[value.size() + 1];
-        std::strcpy(stringV, value.c_str());
+		setValue(value);
 	}
 	NValue(bool value)
 	{
-		type = NValueType::BOOL;
-		boolV = value;
+		if (value == true)
+			setValue("true");
+		else
+			setValue("false");
 	}
 	NValue(char value)
 	{
-		type = NValueType::CHAR;
-		charV = value;
+		std::string str(1, value);
+		setValue(str);
 	}
 
 	//destructor
 	~NValue()
 	{
-		if (type == NValueType::STRING)
-			delete[] stringV;
+		clear();
 	}
 
 	//operator
 	const NValue& operator=(const int& value)
 	{
-		type = NValueType::INT;
-		intV = value;
+		setValue(std::to_string(value));
+		return *this;
+	}
+	const NValue& operator=(const float& value)
+	{
+		setValue(std::to_string(value));
 		return *this;
 	}
 	const NValue& operator=(const std::string& value)
 	{
-		if (type == NValueType::STRING)
-			delete[] stringV;
-
-		type = NValueType::STRING;
-		stringV = new char[value.size() + 1];
-		std::strcpy(stringV, value.c_str());
+		setValue(value);
 
 		return *this;
 	}
 	const NValue& operator=(const bool& value)
 	{
-		type = NValueType::BOOL;
-		boolV = value;
+		if (value == true)
+			setValue("true");
+		else
+			setValue("false");
 		return *this;
 	}
 	const NValue& operator=(const char& value)
 	{
-		type = NValueType::CHAR;
-		charV = value;
+		std::string str(1, value);
+		setValue(str);
 		return *this;
 	}
 
-	int getIntValue()
+	int getInt()
 	{
-		return intV;
+		if (isInt(value))
+			return toInt(value);
+		else
+			std::cerr << "cannot convert '" << value << " to int" << std::endl;
 	}
-	char* getStringValue()
+	float getFloat()
 	{
-		return stringV;
+		if (isFloat(value))
+			return toFloat(value);
+		else
+			std::cerr << "cannot convert '" << value << " to float" << std::endl;
 	}
-	bool getBoolValue()
+	char* getString()
 	{
-		return boolV;
+		return value;
 	}
-	char getCharValue()
+	bool getBool()
 	{
-		return charV;
+		if (isBool(value) != -1)
+			return isBool(value);
+		else
+			std::cerr << "cannot convert '" << value << " to bool" << std::endl;
+	}
+	char getChar()
+	{
+		if(isChar(value) != '\0')
+			return isChar(value);
+		else
+			std::cerr << "cannot convert '" << value << "' to char" << std::endl;
 	}
 
 };

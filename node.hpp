@@ -46,21 +46,7 @@ public:
 			{
 				NValue node = pair.second;
 
-				if(node.type == NValueType::INT)
-					file << pair.first << ": " << node.getIntValue() << std::endl;
-				if(node.type == NValueType::STRING)
-					file << pair.first << ": " << node.getStringValue() << std::endl;
-				if(node.type == NValueType::BOOL)
-				{
-					const char* value;
-					if(node.getBoolValue() == true)
-						value = "true";
-					else
-						value = "false";
-					file << pair.first << ": " << value << std::endl;
-				}
-				if(node.type == NValueType::CHAR)
-					file << pair.first << ": " << node.getCharValue() << std::endl;
+				file << pair.first << ": " << node.getString() << std::endl;
 			}
 			file.close();
 		}else
@@ -80,6 +66,7 @@ public:
 				std::map<std::string, NValue> d = parseReadYaml(line);
 
 				data.insert(d.begin(), d.end());
+
 			}
 
 			file.close();
@@ -92,14 +79,22 @@ public:
 	{
 		return data.size();
 	}
+
+	bool contains(std::string key)
+	{
+		if(data.find(key) != data.end())
+			return true;
+		else
+			return false;
+	}
 	
 	//operator
 	NValue& operator[](const std::string& key)
 	{
 		std::string specialChars = " !@#$%^&*():;,?./\\§&#'{[-|`_^à@)]°=+}";
-    	size_t found = key.find_first_of(specialChars);
+		size_t found = key.find_first_of(specialChars);
 
-    	if (found != std::string::npos) 
+		if (found != std::string::npos) 
 			std::cerr << "forbids letter special characters in key : " << key << std::endl;
 
 		return data[key];
