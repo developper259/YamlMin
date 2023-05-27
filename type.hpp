@@ -1,5 +1,5 @@
-#ifndef TYPE_NODE_YAML
-#define TYPE_NODE_YAML
+#ifndef TYPE_NODE_YAML_HPP
+#define TYPE_NODE_YAML_HPP
 
 #include <iostream>
 #include <string>

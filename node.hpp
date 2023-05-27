@@ -6,7 +6,7 @@
 #include <map>
 #include <string>
 
-#include "type.hpp"
+#include "Type.hpp"
 
 class YamlNode
 {
@@ -44,8 +44,6 @@ public:
 			for (const auto& pair : data)
 			{
 				NValue node = pair.second;
-				if (node.type == NValueType::STRING)
-					std::cout << "1" << std::endl;
 
 				if(node.type == NValueType::INT)
 					file << pair.first << ": " << node.getIntValue() << std::endl;
@@ -53,7 +51,7 @@ public:
 					file << pair.first << ": " << '"' << node.getStringValue() << '"' << std::endl;
 				if(node.type == NValueType::BOOL)
 				{
-					char* value;
+					const char* value;
 					if(node.getBoolValue() == true)
 						value = "true";
 					else
@@ -70,6 +68,12 @@ public:
 	//operator
 	NValue& operator[](const std::string& key)
 	{
+		std::string specialChars = " !@#$%^&*():;,?./\\§&#'{[-|`_^à@)]°=+}";
+    	size_t found = str.find_first_of(specialChars);
+
+    	if (found != std::string::npos) 
+			std::cerr << "forbids letter special characters in key : " << key << std::endl;
+
 		return data[key];
 	}
 

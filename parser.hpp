@@ -1,5 +1,5 @@
-#ifndef YAML_PARSER_HPP
-#define YAML_PARSER_HPP
+#ifndef NODE_YAML_PARSER_HPP
+#define NODE_YAML_PARSER_HPP
 
 #include <iostream>
 #include <vector>
