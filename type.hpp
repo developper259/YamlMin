@@ -2,9 +2,7 @@
 #define TYPE_NODE_YAML_HPP
 
 #include <iostream>
-#include <string>
-
-#include "parser.hpp"
+#include <cstring>
 
 
 enum class NValueType
