@@ -4,9 +4,10 @@
 
 #include "Node.hpp"
 #include "Type.hpp"
+#include "Parser.hpp"
 
 
-int main(int argc, char const *argv[])
+/*int main(int argc, char const *argv[])
 {
 	YamlNode node;
 
@@ -15,4 +16,4 @@ int main(int argc, char const *argv[])
 	std::cout << node["message"].getStringValue() << std::endl;
 
 	return 0;
-}
+}*/
