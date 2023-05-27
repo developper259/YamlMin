@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <string>
 
 std::vector<char*> split(const char* str, char delimiter)
 {

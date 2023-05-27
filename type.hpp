@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 
+#include "parser.hpp"
+
 
 enum class NValueType
 {
@@ -36,10 +38,11 @@ struct NValue
 		type = NValueType::INT;
 		intV = value;
 	}
-	NValue(char* value)
+	NValue(std::string value)
 	{
 		type = NValueType::STRING;
-		stringV = value;
+        stringV = new char[value.size() + 1];
+        std::strcpy(stringV, value.c_str());
 	}
 	NValue(bool value)
 	{
@@ -52,6 +55,13 @@ struct NValue
 		charV = value;
 	}
 
+	//destructor
+	~NValue()
+	{
+		if (type == NValueType::STRING)
+			delete[] stringV;
+	}
+
 	//operator
 	const NValue& operator=(const int& value)
 	{
@@ -59,10 +69,15 @@ struct NValue
 		intV = value;
 		return *this;
 	}
-	const NValue& operator=(char*& value)
+	const NValue& operator=(const std::string& value)
 	{
+		if (type == NValueType::STRING)
+			delete[] stringV;
+
 		type = NValueType::STRING;
-		stringV = value;
+		stringV = new char[value.size() + 1];
+		std::strcpy(stringV, value.c_str());
+
 		return *this;
 	}
 	const NValue& operator=(const bool& value)
