@@ -31,6 +31,7 @@ public:
 		}else
 		{
 			std::cerr << "error to open file : " << path << std::endl;
+			exit(0);
 		}
 	}
 
@@ -52,6 +53,7 @@ public:
 		}else
 		{
 			std::cerr << "error to open file : " << path << std::endl;
+			exit(0);
 		}
 	}
 
@@ -98,19 +100,19 @@ public:
 				//-------------convert-------------
 				if (valueSTR.compare("NULL") != 0 && !valueSTR.empty())
 				{
-					value.setValue((std::string) valueSTR);	
+					value.setValue((std::string) valueSTR);
+					std::cout << value.getString() << std::endl;
 				}
 				//-------------fin convert-------------
 
-				std::map<std::string, NValue> d{{key, value}};
-
-				data.insert(d.begin(), d.end());
+				data.insert(std::make_pair(key, value));
 
 			}
 
 			file.close();
 		} else {
 			std::cerr << "Erreur lors de l'ouverture du fichier : " << path << std::endl;
+			exit(0);
 		}
 	}
 
@@ -133,10 +135,18 @@ public:
 		std::string specialChars = " !@#$%^&*():;,?./\\§&#'{[|`^à@)]°=+}";
 		size_t found = key.find_first_of(specialChars);
 
-		if (found != std::string::npos) 
+		if (found != std::string::npos)
+		{
 			std::cerr << "forbids letter special characters in key : " << key << std::endl;
-
-		return data[key];
+			exit(0);
+		}
+		else if (!contains(key))
+		{
+			std::cerr << "key not found : " << key << std::endl;
+			exit(0);
+		}
+		else
+			return data[key];
 	}
 
 };

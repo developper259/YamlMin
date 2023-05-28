@@ -6,9 +6,12 @@
 
 #include "Verif.hpp"
 
+
+
 struct NValue
 {
 	char* value;
+
 
 	void clear()
 	{
@@ -89,19 +92,22 @@ struct NValue
 		return *this;
 	}
 
+	//getter
 	int getInt()
 	{
 		if (isInt(value))
 			return toInt(value);
 		else
-			std::cerr << "cannot convert '" << value << " to int" << std::endl;
+			std::cerr << "cannot convert '" << value << "' to int" << std::endl;
+			exit(0);
 	}
 	float getFloat()
 	{
 		if (isFloat(value))
 			return toFloat(value);
 		else
-			std::cerr << "cannot convert '" << value << " to float" << std::endl;
+			std::cerr << "cannot convert '" << value << "' to float" << std::endl;
+			exit(0);
 	}
 	char* getString()
 	{
@@ -112,7 +118,8 @@ struct NValue
 		if (isBool(value) != -1)
 			return isBool(value);
 		else
-			std::cerr << "cannot convert '" << value << " to bool" << std::endl;
+			std::cerr << "cannot convert '" << value << "' to bool" << std::endl;
+			exit(0);
 	}
 	char getChar()
 	{
@@ -120,6 +127,7 @@ struct NValue
 			return isChar(value);
 		else
 			std::cerr << "cannot convert '" << value << "' to char" << std::endl;
+			exit(0);
 	}
 
 };
