@@ -33,6 +33,14 @@ std::vector<char*> split(const char* str, char delimiter)
 	return result;
 }
 
+std::string join(const std::vector<std::string>& vec) {
+	std::string result;
+	for (const std::string& str : vec) {
+		result += str;
+	}
+	return result;
+}
+
 std::string supFirstSpace(std::string str)
 {
 	size_t pos = str.find_first_not_of(' ');
@@ -40,51 +48,6 @@ std::string supFirstSpace(std::string str)
 		return str.substr(pos);
 	else
 		return str;
-}
-
-std::map<std::string, NValue> parseReadYaml(std::string line)
-{
-	char tv[2][1024];
-
-	int index = 0;
-	int index2 = 0;
-	int index3 = 0;
-
-	for (int i = 0; i < line.size(); i++)
-	{
-		char c = line.at(i);
-		if (index == 0)
-		{
-			if (c == ':')
-			{
-				index++;
-			}else{
-				tv[index][index2] = c;
-				index2++;
-			}
-		}else{
-			tv[index][index3] = c;
-			index3++;
-		}
-	}
-
-	std::string key(tv[0], index2);
-	std::string valueSTR(tv[1], index3);
-
-	valueSTR = supFirstSpace(valueSTR);
-
-	NValue value;
-
-	//-------------convert-------------
-	if (valueSTR.compare("NULL") != 0 && !valueSTR.empty())
-	{
-		value.setValue((std::string) valueSTR);	
-	}
-	//-------------fin convert-------------
-
-	std::map<std::string, NValue> data{{key, value}};
-
-	return data;
 }
 
 #endif

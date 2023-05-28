@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
-#include <string>
+#include <cstring>
 
 #include "Type.hpp"
 #include "Parser.hpp"
@@ -63,7 +63,46 @@ public:
 			std::string line;
 
 			while (std::getline(file, line)) {
-				std::map<std::string, NValue> d = parseReadYaml(line);
+
+				char tv[2][1024];
+
+				int index = 0;
+				int index2 = 0;
+				int index3 = 0;
+
+				for (int i = 0; i < line.size(); i++)
+				{
+					char c = line.at(i);
+					if (index == 0)
+					{
+						if (c == ':')
+						{
+							index++;
+						}else{
+							tv[index][index2] = c;
+							index2++;
+						}
+					}else{
+						tv[index][index3] = c;
+						index3++;
+					}
+				}
+
+				std::string key(tv[0], index2);
+				std::string valueSTR(tv[1], index3);
+
+				valueSTR = supFirstSpace(valueSTR);
+
+				NValue value;
+
+				//-------------convert-------------
+				if (valueSTR.compare("NULL") != 0 && !valueSTR.empty())
+				{
+					value.setValue((std::string) valueSTR);	
+				}
+				//-------------fin convert-------------
+
+				std::map<std::string, NValue> d{{key, value}};
 
 				data.insert(d.begin(), d.end());
 
@@ -91,7 +130,7 @@ public:
 	//operator
 	NValue& operator[](const std::string& key)
 	{
-		std::string specialChars = " !@#$%^&*():;,?./\\§&#'{[-|`_^à@)]°=+}";
+		std::string specialChars = " !@#$%^&*():;,?./\\§&#'{[|`^à@)]°=+}";
 		size_t found = key.find_first_of(specialChars);
 
 		if (found != std::string::npos) 
