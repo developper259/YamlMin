@@ -63,4 +63,24 @@ char isChar(std::string str)
 		return '\0';
 }
 
+std::string toString(int v)
+{
+	return std::to_string(v);
+}
+std::string toString(float v)
+{
+	return std::to_string(v);
+}
+std::string toString(bool v)
+{
+	if (v == true)
+		return "true";
+	else
+		return "false";
+}
+std::string toString(char v)
+{
+	return std::to_string(v);
+}
+
 #endif
