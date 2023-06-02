@@ -10,15 +10,24 @@ supported variable format :
 - bool
 - char
 
+Before writing your code, you need to import the YamlMin library:
+
+	#include "path/to/librairie/Yaml.hpp"
+
 Example **code** for **writing** :
 
 	YamlNode node;
 
-	node["str"] = (std::string) "hello world!"; //it is obligatory to cast to std::string else it will return a boolean value 1.
-	node["int"] = 1234;
-	node["bool"] = true;
-	node["char"] = 'h';
-	node["float"] = 1.47593f;
+	int intV = 1234;
+	bool boolV = true;
+	char charV = 'h';
+	float floatV = 1.08573f;
+
+	node["str"] = "hello world!";
+	node["int"] = toString(intV); // or "1234"
+	node["bool"] = toString(boolV); // or "true"
+	node["char"] = toString(charV); // or "h"
+	node["float"] = toString(floatV); // or "1.08573"
 
 	node.write("data.yaml"); //replace 'data.yaml' with the name of your yaml file
 
@@ -36,11 +45,11 @@ Exemple **code** for **reading** :
 
 	node.read("data.yaml"); //replace 'data.yaml' with the name of your yaml file
 
-	std::cout << node["int"].getInt() << std::endl;
-	std::cout << node["str"].getString() << std::endl;
-	std::cout << node["float"].getFloat() << std::endl;
-	std::cout << node["bool"].getBool() << std::endl;
-	std::cout << node["char"].getChar() << std::endl;
+	std::cout << node["int"] << std::endl;
+	std::cout << node["str"] << std::endl;
+	std::cout << node["float"] << std::endl;
+	std::cout << node["bool"] << std::endl;
+	std::cout << node["char"] << std::endl;
 
 **output** :
 	
@@ -49,3 +58,9 @@ Exemple **code** for **reading** :
 	1.47593
 	true
 	h
+
+you can then convert your variables to 
+- int with the function toInt
+- float with the function toFloat 
+- bool with the function toBool
+- char with the function toChar
