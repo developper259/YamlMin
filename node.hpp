@@ -6,13 +6,13 @@
 #include <map>
 #include <cstring>
 
-#include "Type.hpp"
 #include "Parser.hpp"
+#include "Verif.hpp"
 
 class YamlNode
 {
 private:
-	std::map<std::string, NValue> data;
+	std::map<std::string, std::string> data;
 
 public:
 
@@ -45,9 +45,7 @@ public:
 		{
 			for (const auto& pair : data)
 			{
-				NValue node = pair.second;
-
-				file << pair.first << ": " << node.getString() << std::endl;
+				file << pair.first << ": " << pair.second << std::endl;
 			}
 			file.close();
 		}else
@@ -95,17 +93,7 @@ public:
 
 				valueSTR = supFirstSpace(valueSTR);
 
-				NValue value;
-
-				//-------------convert-------------
-				if (valueSTR.compare("NULL") != 0 && !valueSTR.empty())
-				{
-					value.setValue((std::string) valueSTR);
-					std::cout << value.getString() << std::endl;
-				}
-				//-------------fin convert-------------
-
-				data.insert(std::make_pair(key, value));
+				data.insert(std::make_pair(key, valueSTR));
 
 			}
 
@@ -128,27 +116,29 @@ public:
 		else
 			return false;
 	}
-	
-	//operator
-	NValue& operator[](const std::string& key)
+
+	bool asSpecialChar(const std::string& str)
 	{
 		std::string specialChars = " !@#$%^&*():;,?./\\§&#'{[|`^à@)]°=+}";
-		size_t found = key.find_first_of(specialChars);
+		size_t found = str.find_first_of(specialChars);
 
-		if (found != std::string::npos)
+		if(found != std::string::npos)
+			return false;
+		else
+			return true;
+	}
+	
+	//operator
+	std::string& operator[](const std::string& key)
+	{
+		if (!asSpecialChar(key))
 		{
 			std::cerr << "forbids letter special characters in key : " << key << std::endl;
-			exit(0);
-		}
-		else if (!contains(key))
-		{
-			std::cerr << "key not found : " << key << std::endl;
 			exit(0);
 		}
 		else
 			return data[key];
 	}
-
 };
 
 #endif

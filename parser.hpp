@@ -6,8 +6,6 @@
 #include <cstring>
 #include <string>
 
-#include "Type.hpp"
-
 
 std::vector<char*> split(const char* str, char delimiter)
 {

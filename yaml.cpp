@@ -2,9 +2,7 @@
 #include <fstream>
 #include <vector>
 
-#include "Node.hpp"
-#include "Type.hpp"
-
+#include "Yaml.hpp"
 
 int main(int argc, char const *argv[])
 {
@@ -12,7 +10,9 @@ int main(int argc, char const *argv[])
 
 	node.read("data.yaml");
 
-	std::cout << node["test"].getInt() << std::endl;
+	int number = toInt(node["number"]);
+
+	std::cout << number << std::endl;
 
 	return 0;
 }
