@@ -91,7 +91,7 @@ public:
 				std::string key(tv[0], index2);
 				std::string valueSTR(tv[1], index3);
 
-				valueSTR = supFirstSpace(valueSTR);
+				valueSTR = supFirstElement(valueSTR, ' ');
 
 				data.insert(std::make_pair(key, valueSTR));
 
