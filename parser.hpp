@@ -6,8 +6,7 @@
 #include <cstring>
 #include <string>
 
-
-std::vector<char*> split(const char* str, char delimiter)
+std::vector<std::string> split(const char* str, char delimiter)
 {
 	char tv[100][255];
 	int index = 0;
@@ -26,11 +25,12 @@ std::vector<char*> split(const char* str, char delimiter)
 		}
 	}
 
-	std::vector<char*> result(tv, tv + (index + 1));
+	std::vector<std::string> result(tv, tv + (index + 1));
+	
+    memset(tv, 0, sizeof(tv));
 
 	return result;
 }
-
 
 std::vector<std::string> split(const char* str, std::string delimiter)
 {
@@ -82,6 +82,8 @@ std::string join(const std::vector<std::string>& vec, std::string delimiter) {
 
 std::string supFirstElement(std::string str, char c)
 {
+	if (str == "")
+		return str;
 	size_t pos = str.find_first_not_of(c);
 	if (pos != std::string::npos)
 		return str.substr(pos);

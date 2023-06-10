@@ -7,20 +7,23 @@
 int main(int argc, char const *argv[])
 {
 	YamlNode node;
-	std::vector<float> v{190.5784, 578.09, 940.13, 19.67, 4.5};
+	/*std::vector<std::string> v{"hello", "hi", "holla", "hallo", ""};
 
 	node["table"] = toString(v);
 
-	std::string table = node["table"];
+	node.write("data.yml");*/
+	node.read("data.yml");
 
-	std::vector<float> vec = toVecFloat(table);
+	/*std::string table = node["table"];
+
+	std::vector<std::string> vec = toVecString(table);
 
 	for (auto value : vec)
 	{
 		std::cout << value << std::endl;
-	}
+	}*/
 
-	std::cout << table << std::endl;
+	std::cout << node["table"] << std::endl;
 
 	return 0;
 }

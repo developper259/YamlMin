@@ -67,8 +67,19 @@ char isChar(std::string str)
 		return '\0';
 }
 
+bool isTable(std::string v)
+{
+	if (v.at(0) != '[' || v.at(v.size() - 1) != ']')
+	{
+		return false;
+	}
+	return true;
+}
+
 std::vector<std::string> toVecString(std::string v)
 {
+	if (v == "")
+		return {};
 	if (v.at(0) != '[' || v.at(v.size() - 1) != ']')
 	{
 		std::cerr << "string : '" << v << "' not a table" << std::endl;
@@ -157,7 +168,25 @@ std::string toString(char v)
 
 std::string toString(std::vector<std::string> v)
 {
-	std::string result = "[\"" + join(v, "\", \"") + "\"]";
+	std::string result;
+
+	int index = 0;
+	for (const std::string& str : v) {
+		if (str != "")
+		{
+			if (str.at(0) == '-')
+			{
+				std::cerr << "invalid character '-' in string : " << str << std::endl;
+				exit(0);
+			}	
+		}
+		if (index != 0)
+			result += "\", \"";
+		result += str;
+		index++;
+	}
+
+	result = "[\"" + result + "\"]";
 
 	return result;
 }

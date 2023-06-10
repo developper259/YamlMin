@@ -29,7 +29,7 @@ Example **code** for **writing** :
 	node["char"] = toString(charV); // or "h"
 	node["float"] = toString(floatV); // or "1.08573"
 
-	node.write("data.yaml"); //replace 'data.yaml' with the name of your yaml file
+	node.write("data.yml"); //replace 'data.yml' with the name of your yaml file
 
 **data.yaml** :
 
@@ -43,7 +43,7 @@ Exemple **code** for **reading** :
 
 	YamlNode node;
 
-	node.read("data.yaml"); //replace 'data.yaml' with the name of your yaml file
+	node.read("data.yml"); //replace 'data.yml' with the name of your yaml file
 
 	std::cout << node["int"] << std::endl;
 	std::cout << node["str"] << std::endl;

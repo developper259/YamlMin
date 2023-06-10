@@ -45,7 +45,28 @@ public:
 		{
 			for (const auto& pair : data)
 			{
-				file << pair.first << ": " << pair.second << std::endl;
+				std::string value = pair.second;
+				if (value == "")
+				{
+					file << pair.first << ": null" << std::endl;
+				}else if (isTable(value))
+				{
+					std::vector<std::string> vec = toVecString(value);
+					file << pair.first << ": " << std::endl;
+
+					for (auto v : vec)
+					{
+						if (v == "")
+						{
+							v = "null";
+						}
+						file << "	- " << v << std::endl;
+					}
+
+				}else
+				{
+					file << pair.first << ": " << value << std::endl;
+				}
 			}
 			file.close();
 		}else
@@ -61,40 +82,58 @@ public:
 
 		if (file.is_open()) {
 			std::string line;
+			std::vector<std::string> vec;
+			std::string vecKey;
 
 			while (std::getline(file, line)) {
 
-				char tv[2][1024];
+				line = supFirstElement(line, ' ');
+				line = supFirstElement(line, '\t');
 
-				int index = 0;
-				int index2 = 0;
-				int index3 = 0;
-
-				for (int i = 0; i < line.size(); i++)
+				if (line.at(0) == '-')
 				{
-					char c = line.at(i);
-					if (index == 0)
+					if (vecKey == "")
 					{
-						if (c == ':')
-						{
-							index++;
-						}else{
-							tv[index][index2] = c;
-							index2++;
-						}
-					}else{
-						tv[index][index3] = c;
-						index3++;
+						std::cerr << "error when reading " << path << " file: elements of a table are instantiated but no table has been created" << std::endl;
+						exit(0);
 					}
+
+					line = supFirstElement(line, '-');
+					line = supFirstElement(line, ' ');
+
+					vec.push_back(line);
+				}else
+				{
+					std::vector<std::string> l = split(line.c_str(), ':');
+
+					std::string key = l[0];
+					std::string value = l[1];
+
+					value = supFirstElement(value, ' ');
+
+					if (value == "" || value == " ")
+					{
+						vecKey = key;
+					}else
+					{
+						if (vecKey != "")
+						{
+							data[vecKey] = toString(vec);
+
+							vecKey.clear();
+							vec.clear();
+						}
+						data[key] = value;
+					}
+
 				}
+			}
+			if (vecKey != "")
+			{
+				data[vecKey] = toString(vec);
 
-				std::string key(tv[0], index2);
-				std::string valueSTR(tv[1], index3);
-
-				valueSTR = supFirstElement(valueSTR, ' ');
-
-				data.insert(std::make_pair(key, valueSTR));
-
+				vecKey.clear();
+				vec.clear();
 			}
 
 			file.close();
@@ -127,6 +166,15 @@ public:
 		else
 			return true;
 	}
+	bool asLeters(const std::string& str, std::string leters)
+	{
+		size_t found = str.find_first_of(leters);
+
+		if(found != std::string::npos)
+			return false;
+		else
+			return true;
+	}
 	
 	//operator
 	std::string& operator[](const std::string& key)
@@ -135,8 +183,7 @@ public:
 		{
 			std::cerr << "forbids letter special characters in key : " << key << std::endl;
 			exit(0);
-		}
-		else
+		}else
 			return data[key];
 	}
 };
